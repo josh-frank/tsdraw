@@ -6,17 +6,18 @@ import styles from '../styles/Home.module.css'
 
 const Artboard: FunctionComponent = () => {
 
-    const clientDimensions = useSelector( state => state.client.dimensions );
+    const { dimensions, mouse, mouseDown } = useSelector( state => state.client );
 
     return (
         <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             className={ styles.artboard }
-            width={ clientDimensions.width }
-            height={ clientDimensions.height }
-            viewBox={ `0 0 ${ clientDimensions.width } ${ clientDimensions.height }` }
+            width={ dimensions?.width }
+            height={ dimensions?.height }
+            viewBox={ `0 0 ${ dimensions?.width } ${ dimensions?.height }` }
         >
+            { mouseDown && <circle cx={ mouse.x } cy={ mouse.y } r="10" fill="black"></circle> }
         </svg>
     );
 
