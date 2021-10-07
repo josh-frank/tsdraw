@@ -5,12 +5,10 @@ import { RootState } from "./store";
 interface ClientState {
     dimensions: Dimensions,
     mouse: Coordinates,
-    mouseDown: boolean
+    mouseDown: any,
 }
 
-const initialState = {
-    mouseDown: false
-} as ClientState;
+const initialState = {} as ClientState;
 
 const clientSlice = createSlice( {
     name: "client",
@@ -18,8 +16,8 @@ const clientSlice = createSlice( {
     reducers: {
         setDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
         setMouse: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, mouse: action.payload } ),
-        setMouseDown: ( state ) => ( { ...state, mouseDown: true } ),
-        setMouseUp: ( state ) => ( { ...state, mouseDown: false } )
+        setMouseDown: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, mouseDown: action.payload } ),
+        setMouseUp: ( state ) => ( { ...state, mouseDown: null } )
     }
 } );
 
@@ -30,7 +28,7 @@ export const {
     setMouseUp
 } = clientSlice.actions;
 
-export const selectdimensions = ( state: RootState ) => state.client.dimensions;
+export const selectDimensions = ( state: RootState ) => state.client.dimensions;
 export const selectMouse = ( state: RootState ) => state.client.mouse;
 export const selectMouseDown = ( state: RootState ) => state.client.mouseDown;
 

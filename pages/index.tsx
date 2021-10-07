@@ -14,8 +14,9 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleMouseDown = useCallback( mouseDownEvent => {
+    console.log('%c 🍋 mouseDownEvent: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', mouseDownEvent);
     dispatch( setMouse( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
-    dispatch( setMouseDown() );
+    dispatch( setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
   }, [ dispatch ] );
 
   const handleMouseUp = useCallback( () => dispatch( setMouseUp() ), [ dispatch ] );
