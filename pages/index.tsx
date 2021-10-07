@@ -7,6 +7,7 @@ import { useAppDispatch as useDispatch } from '../hooks'
 import { setMouse, setMouseDown, setMouseUp, setDimensions } from '../redux/clientSlice'
 
 import Artboard from './artboard'
+import Drawer from './drawer'
 
 const Home: NextPage = () => {
   
@@ -43,6 +44,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Artboard />
+      <Drawer />
     </div>
   );
 
