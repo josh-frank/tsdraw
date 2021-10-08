@@ -1,15 +1,15 @@
 import { FunctionComponent, useEffect, useRef } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../hooks";
-import { addPoint, selectPoints } from "../redux/penSlice";
+import { selectDimensions, selectMouse, selectMouseDown } from "../redux/clientSlice";
+import { addPoint, closePath, selectPoints, selectShapes } from "../redux/penSlice";
 
 import styles from '../styles/Home.module.css'
 import { Coordinates } from "../types";
-import { selectDimensions, selectMouse, selectMouseDown } from "../redux/clientSlice";
 
-const toPath = ( points: Coordinates[] ): string => `M ${ points[ 0 ]?.x } ${ points[ 0 ]?.y }` + points?.slice( 1 ).reduce( ( path, point, index ) => `${ path } ${ index % 3 ? "" : "C " }${ point.x } ${ point.y }`, "" );
+import { reflect } from "../utilities";
 
-const reflect = ( mouseDown: number, mouseCurrent: number ): number => mouseCurrent + ( mouseCurrent - mouseDown );
+const toPath = ( points: Coordinates[] ): string => `M ${ points[ 0 ]?.x } ${ points[ 0 ]?.y }` + points?.slice( 1, points.length - 1 ).reduce( ( path, point, index ) => `${ path } ${ index % 3 ? "" : "C " }${ point.x } ${ point.y }`, "" );
 
 const PenTool: FunctionComponent = () => {
 
@@ -19,6 +19,7 @@ const PenTool: FunctionComponent = () => {
     const mouse = useSelector( selectMouse );
     const mouseDown = useSelector( selectMouseDown );
     const points = useSelector( selectPoints );
+    const shapes = useSelector( selectShapes );
 
     const previousMouse = useRef<Coordinates>();
     const previousMouseDown = useRef<any>();
@@ -43,7 +44,7 @@ const PenTool: FunctionComponent = () => {
             className={ styles.PenTool }
             width={ dimensions?.width }
             height={ dimensions?.height }
-            viewBox={ `0 0 ${ dimensions?.width } ${ dimensions?.height }` }
+            viewBox={ `0 0 ${ dimensions?.width || "0" } ${ dimensions?.height || "0" }` }
         >
 
             { mouseDown && <g>
@@ -59,10 +60,16 @@ const PenTool: FunctionComponent = () => {
                 />
             </g> }
 
-            { points && <g>
+            { points?.length && <g>
                 <path d={ toPath( points || [] ) } stroke="black" fill="none" />
                 <g>
-                    <circle cx={ points[ 0 ]?.x } cy={ points[ 0 ]?.y } r="5" fill="#f00" />
+                    <circle
+                        cx={ points[ 0 ]?.x }
+                        cy={ points[ 0 ]?.y }
+                        r="5"
+                        fill="#f00"
+                        onClick={ () => dispatch( closePath() ) }
+                    />
                     <circle cx={ points[ 1 ]?.x } cy={ points[ 1 ]?.y } r="5" fill="#f00" />
                     <line
                         x1={ points[ 0 ]?.x }
@@ -85,6 +92,8 @@ const PenTool: FunctionComponent = () => {
                     </g> ) }
                 </g>
             </g> }
+
+            { shapes?.length && shapes?.map( ( shape, index ) => <path key={ index } d={ toPath( shape ) } stroke="blue" fill="none" /> ) }
 
         </svg>
     );

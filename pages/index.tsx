@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleMouseDown = useCallback( mouseDownEvent => {
-    if ( mouseDownEvent.target.tagName !== "BUTTON" ) {
+    if ( ![ "BUTTON", "circle" ].includes( mouseDownEvent.target.tagName ) ) {
       dispatch( setMouse( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
       dispatch( setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
     }
