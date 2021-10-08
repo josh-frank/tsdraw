@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Coordinates, CurvePoint, Dimensions } from "../types";
+import { Coordinates } from "../types";
 import { RootState } from "./store";
 
 interface PenState {
-    points: Array<CurvePoint>;
+    points: Coordinates[];
 }
 
 const initialState = {
@@ -14,7 +14,7 @@ const penSlice = createSlice( {
     name: "pen",
     initialState,
     reducers: {
-        addPoint: ( state, action: PayloadAction<CurvePoint> ) => ( { ...state, points: [ ...state.points, action.payload ] } )
+        addPoint: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, points: [ ...state.points, action.payload ] } )
     }
 } );
 

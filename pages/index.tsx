@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react'
 import { useAppDispatch as useDispatch } from '../hooks'
 import { setMouse, setMouseDown, setMouseUp, setDimensions } from '../redux/clientSlice'
 
-import Artboard from './artboard'
+import PenTool from './penTool'
 import Drawer from './drawer'
 
 const Home: NextPage = () => {
@@ -14,9 +14,10 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleMouseDown = useCallback( mouseDownEvent => {
-    console.log('%c 🍋 mouseDownEvent: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', mouseDownEvent);
-    dispatch( setMouse( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
-    dispatch( setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
+    if ( mouseDownEvent.target.tagName !== "BUTTON" ) {
+      dispatch( setMouse( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
+      dispatch( setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
+    }
   }, [ dispatch ] );
 
   const handleMouseUp = useCallback( () => dispatch( setMouseUp() ), [ dispatch ] );
@@ -44,7 +45,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Artboard />
+      <PenTool />
       <Drawer />
     </div>
   );
