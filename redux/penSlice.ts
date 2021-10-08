@@ -7,6 +7,7 @@ import { reflect } from "../utilities";
 interface PenState {
     points: Coordinates[];
     shapes: Coordinates[][];
+    activeShape?: number
 }
 
 const initialState = {
@@ -32,7 +33,12 @@ const penSlice = createSlice( {
                 points: [] 
             };
         },
-        clearPoints: ( state ) => ( { ...state, points: [] } )
+        clearPoints: ( state ) => ( { ...state, points: [] } ),
+        activateShape: ( state, action: PayloadAction<number> ) => ( { ...state, activeShape: action.payload } ),
+        deactivateShapes: ( state ) => {
+            delete state.activeShape;
+            return state;
+        },
     }
 } );
 
@@ -40,9 +46,12 @@ export const {
     addPoint,
     closePath,
     clearPoints,
+    activateShape,
+    deactivateShapes
 } = penSlice.actions;
 
 export const selectPoints = ( state: RootState ) => state.pen.points;
 export const selectShapes = ( state: RootState ) => state.pen.shapes;
+export const selectActiveShape = ( state: RootState ) => state.pen.activeShape;
 
 export default penSlice.reducer;
