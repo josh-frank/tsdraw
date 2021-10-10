@@ -1,25 +1,23 @@
 import { FunctionComponent } from "react";
 
-import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { activateShape, deactivateShapes, selectActiveShape, selectShapes } from "../../redux/penSlice";
-import { toPath } from "../../utilities";
+import { useAppSelector as useSelector } from "../../hooks";
+import { selectShapes } from "../../redux/penSlice";
+
+import Shape from "./shape";
 
 const Shapes: FunctionComponent = () => {
 
-    const dispatch = useDispatch();
-
     const shapes = useSelector( selectShapes );
-    const activeShapeIndex = useSelector( selectActiveShape );
 
     return (
         <g>
-            { shapes?.length && shapes?.map( ( shape, index ) => <path
-                key={ index }
-                d={ toPath( shape ) }
-                stroke={ index === activeShapeIndex ? "red" : "blue" }
-                fill="white"
-                onClick={ () => dispatch( index === activeShapeIndex ? deactivateShapes() : activateShape( index ) ) }
-            /> ) }
+            { shapes?.length && shapes?.map( ( path, shapeIndex ) =>
+                <Shape
+                    key={ shapeIndex }
+                    path={ path }
+                    shapeIndex={ shapeIndex }
+                />
+            ) }
         </g>
     );
 

@@ -48,12 +48,12 @@ const Home: NextPage = () => {
   return (
     <div>
 
-      <Drawer />
-
       <SvgWrapper>
         <Pen />
         <Shapes />
       </SvgWrapper>
+
+      <Drawer />
 
     </div>
   );

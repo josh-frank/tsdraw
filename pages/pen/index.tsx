@@ -40,13 +40,19 @@ const Pen: FunctionComponent = () => {
             { mouseDown && <g>
                 { points?.length && <circle cx={ reflect( mouse.x, mouseDown.x ) } cy={ reflect( mouse.y, mouseDown.y ) } r="5" fill="#f00" /> }
                 <circle cx={ mouse.x } cy={ mouse.y } r="5" fill="#f00" />
-                <circle cx={ mouseDown.x } cy={ mouseDown.y } r="5" fill="#f00" />
                 <line
                     x1={ mouse.x }
                     y1={ mouse.y }
                     x2={ points?.length ? reflect( mouse.x, mouseDown.x ) : mouseDown.x }
                     y2={ points?.length ? reflect( mouse.y, mouseDown.y ) : mouseDown.y }
                     stroke="#f00"
+                />
+                <circle
+                    cx={ mouseDown.x }
+                    cy={ mouseDown.y }
+                    r={ points?.length ? "5" : "7" }
+                    fill={ points?.length ? "#f00" : "white" }
+                    stroke={ points?.length ? "none" : "#f00" }
                 />
             </g> }
 
