@@ -1,27 +1,21 @@
 import { FunctionComponent, useEffect, useRef } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { selectDimensions, selectMouse, selectMouseDown } from "../../redux/clientSlice";
-import { activateShape, addPoint, closePath, deactivateShapes, selectActiveShape, selectPoints, selectShapes } from "../../redux/penSlice";
+import { selectMouse, selectMouseDown } from "../../redux/clientSlice";
+import { addPoint, closePath, deactivateShapes, selectPoints } from "../../redux/penSlice";
 
-import styles from '../../styles/Home.module.css'
 import { Coordinates } from "../../types";
 
-import { reflect } from "../../utilities";
+import { reflect, toPath } from "../../utilities";
 import ClosePathButton from "./closePathButton";
-
-const toPath = ( points: Coordinates[] ): string => `M ${ points[ 0 ]?.x } ${ points[ 0 ]?.y }` + points?.slice( 1, points.length - 1 ).reduce( ( path, point, index ) => `${ path } ${ index % 3 ? "" : "C " }${ point.x } ${ point.y }`, "" );
 
 const Pen: FunctionComponent = () => {
 
     const dispatch = useDispatch();
 
-    const dimensions = useSelector( selectDimensions );
     const mouse = useSelector( selectMouse );
     const mouseDown = useSelector( selectMouseDown );
     const points = useSelector( selectPoints );
-    const shapes = useSelector( selectShapes );
-    const activeShapeIndex = useSelector( selectActiveShape );
 
     const previousMouse = useRef<Coordinates>();
     const previousMouseDown = useRef<any>();
@@ -41,14 +35,7 @@ const Pen: FunctionComponent = () => {
     }, [ dispatch, points, mouse, mouseDown ] );
 
     return (
-        <svg
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            className={ styles.Pen }
-            width={ dimensions?.width }
-            height={ dimensions?.height }
-            viewBox={ `0 0 ${ dimensions?.width || "0" } ${ dimensions?.height || "0" }` }
-        >
+        <g>
 
             { mouseDown && <g>
                 { points?.length && <circle cx={ reflect( mouse.x, mouseDown.x ) } cy={ reflect( mouse.y, mouseDown.y ) } r="5" fill="#f00" /> }
@@ -94,17 +81,9 @@ const Pen: FunctionComponent = () => {
                 </g>
             </g> }
 
-            { shapes?.length && shapes?.map( ( shape, index ) => <path
-                key={ index }
-                d={ toPath( shape ) }
-                stroke={ index === activeShapeIndex ? "red" : "blue" }
-                fill="white"
-                onClick={ () => dispatch( index === activeShapeIndex ? deactivateShapes() : activateShape( index ) ) }
-            /> ) }
-
-        </svg>
+        </g>
     );
 
-}
+};
 
 export default Pen;

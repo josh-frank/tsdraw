@@ -3,9 +3,6 @@ import { useState } from "react"
 const ClosePathButton = ( props: any ): JSX.Element => {
 
     const [ showPopup, setShowPopup ] = useState( false );
-    console.log('%c 🥛 showPopup: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', showPopup);
-
-    // const { dimensions, mouse, mouseDown } = useSelector( state => state.client );
 
     return (
         <g>

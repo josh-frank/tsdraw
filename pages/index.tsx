@@ -8,6 +8,8 @@ import { setMouse, setMouseDown, setMouseUp, setDimensions } from '../redux/clie
 
 import Pen from './pen'
 import Drawer from './drawer'
+import Shapes from './shapes'
+import SvgWrapper from './svgWrapper'
 
 const Home: NextPage = () => {
   
@@ -45,8 +47,14 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Pen />
+
       <Drawer />
+
+      <SvgWrapper>
+        <Pen />
+        <Shapes />
+      </SvgWrapper>
+
     </div>
   );
 
