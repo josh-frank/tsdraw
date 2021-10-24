@@ -18,6 +18,7 @@ const Drawer: FunctionComponent = () => {
                 Drawer content
             </div>
             <button
+                data-name="drawer-button"
                 className={ `${ styles.drawerButton } ${ showDrawer ? styles.drawerButtonShowing : styles.drawerButtonHiding }` }
                 onClick={ () => setShowDrawer( !showDrawer ) }
             >

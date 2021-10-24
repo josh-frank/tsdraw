@@ -2,59 +2,70 @@ import { useState } from "react";
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
 import { activateShape, deactivateShapes, selectActiveShape } from "../../redux/penSlice";
 
-import { Coordinates } from "../../types";
+import { Shape as ShapeType } from "../../types";
 
 import { toPath } from "../../utilities";
+import ShapePoint from "./shapePoint";
 
 interface ShapeProps {
-    path: Coordinates[];
-    shapeIndex: number;
+    shape: ShapeType;
 }
 
-const Shape = ( { path, shapeIndex }: ShapeProps ): JSX.Element => {
+const Shape = ( { shape }: ShapeProps ): JSX.Element => {
     
     const dispatch = useDispatch();
-    const activeShapeIndex = useSelector( selectActiveShape );
+    const activeShape = useSelector( selectActiveShape );
 
-    const isActive = shapeIndex === activeShapeIndex;
+    const isActive = shape.id === activeShape?.id;
 
     const [ hovering, setHovering ] = useState( false );
 
     return (
         <g>
+
             <path
-                d={ toPath( path ) }
+                data-shape-id={ shape.id }
+                d={ toPath( shape.points ) }
                 stroke={ isActive || hovering ? "red" : "black" }
                 fill="white"
                 onMouseEnter={ () => setHovering( true ) }
                 onMouseLeave={ () => setHovering( false ) }
-                onClick={ () => dispatch( isActive ? deactivateShapes() : activateShape( shapeIndex ) ) }
+                onClick={ () => dispatch( isActive ? deactivateShapes() : activateShape( shape.id ) ) }
             />
+
             { isActive && (
                 <g>
-                    <circle cx={ path[ 0 ]?.x } cy={ path[ 0 ]?.y } r="5" fill="#f00" />
-                    <circle cx={ path[ 1 ]?.x } cy={ path[ 1 ]?.y } r="5" fill="#f00" />
                     <line
-                        x1={ path[ 0 ]?.x }
-                        y1={ path[ 0 ]?.y }
-                        x2={ path[ 1 ]?.x }
-                        y2={ path[ 1 ]?.y }
+                        x1={ shape.points[ 0 ]?.x }
+                        y1={ shape.points[ 0 ]?.y }
+                        x2={ shape.points[ 1 ]?.x }
+                        y2={ shape.points[ 1 ]?.y }
                         stroke="#f00"
                     />
-                    { [ ...Array( path.length ) ].reduce( ( result, _, index ) => !( ( index - 2 ) % 3 ) ? [ ...result, index ] : result, [] ).map( ( pointIndex: number ): JSX.Element => <g key={ pointIndex }>
-                        <circle cx={ path[ pointIndex ]?.x } cy={ path[ pointIndex ]?.y } r="5" fill="#f00" />
-                        <circle cx={ path[ pointIndex + 1 ]?.x } cy={ path[ pointIndex + 1 ]?.y } r="5" fill="#f00" />
-                        <circle cx={ path[ pointIndex + 2 ]?.x } cy={ path[ pointIndex + 2 ]?.y } r="5" fill="#f00" />
+                    <ShapePoint pointCoordinates={ shape.points[ 0 ] } pointIndex={ 0 } />
+                    <ShapePoint pointCoordinates={ shape.points[ 1 ] } pointIndex={ 1 } />
+                    { [ ...Array( shape.points.length ) ].reduce( ( result, _, index ) => !( ( index - 2 ) % 3 ) ? [ ...result, index ] : result, [] ).map( ( pointIndex: number ): JSX.Element => <g key={ pointIndex }>
                         <line
-                            x1={ path[ pointIndex ]?.x }
-                            y1={ path[ pointIndex ]?.y }
-                            x2={ path[ pointIndex + 2 ]?.x }
-                            y2={ path[ pointIndex + 2 ]?.y }
+                            x1={ shape.points[ pointIndex ]?.x }
+                            y1={ shape.points[ pointIndex ]?.y }
+                            x2={ shape.points[ pointIndex + 1 ]?.x }
+                            y2={ shape.points[ pointIndex + 1 ]?.y }
                             stroke="#f00"
                         />
+                        <line
+                            x1={ shape.points[ pointIndex + 1 ]?.x }
+                            y1={ shape.points[ pointIndex + 1 ]?.y }
+                            x2={ shape.points[ pointIndex + 2 ]?.x }
+                            y2={ shape.points[ pointIndex + 2 ]?.y }
+                            stroke="#f00"
+                        />
+                        <ShapePoint pointCoordinates={ shape.points[ pointIndex ] } pointIndex={ pointIndex } />
+                        <ShapePoint pointCoordinates={ shape.points[ pointIndex + 1 ] } pointIndex={ pointIndex + 1 } />
+                        <ShapePoint pointCoordinates={ shape.points[ pointIndex + 2 ] } pointIndex={ pointIndex + 2 } />
                     </g> ) }
                 </g>
             ) }
+
         </g>
     );
 

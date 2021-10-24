@@ -8,6 +8,16 @@ export type Coordinates = {
     y: number;
 }
 
+export type MouseDown = {
+    coordinates: Coordinates,
+    dataset: object;
+}
+
+export type Shape = {
+    id: string;
+    points: Coordinates[];
+};
+
 export type CurvePoint = {
     x1: number;
     y1: number;

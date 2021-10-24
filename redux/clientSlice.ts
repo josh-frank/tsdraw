@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Coordinates, Dimensions } from "../types";
+import { Coordinates, Dimensions, MouseDown } from "../types";
 import { RootState } from "./store";
 
 interface ClientState {
     dimensions: Dimensions,
     mouse: Coordinates,
-    mouseDown: any,
+    mouseDown: MouseDown | null,
 }
 
 const initialState = {} as ClientState;
@@ -16,7 +16,7 @@ const clientSlice = createSlice( {
     reducers: {
         setDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
         setMouse: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, mouse: action.payload } ),
-        setMouseDown: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, mouseDown: action.payload } ),
+        setMouseDown: ( state, action: PayloadAction<MouseDown> ) => ( { ...state, mouseDown: action.payload } ),
         setMouseUp: ( state ) => ( { ...state, mouseDown: null } )
     }
 } );

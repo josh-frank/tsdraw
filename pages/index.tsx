@@ -15,10 +15,11 @@ const Home: NextPage = () => {
   
   const dispatch = useDispatch();
 
-  const handleMouseDown = useCallback( mouseDownEvent => {
-    if ( ![ "BUTTON", "path", "circle" ].includes( mouseDownEvent.target.tagName ) ) {
-      dispatch( setMouse( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
-      dispatch( setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } ) );
+  const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
+    const { name, shapeId } = target.dataset;
+    if ( !( name || shapeId ) ) {
+      dispatch( setMouse( { x: clientX, y: clientY } ) );
+      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
     }
   }, [ dispatch ] );
 

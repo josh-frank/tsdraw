@@ -1,21 +1,22 @@
 import { FunctionComponent } from "react";
 
 import { useAppSelector as useSelector } from "../../hooks";
-import { selectShapes } from "../../redux/penSlice";
+import { selectActiveShape, selectShapes } from "../../redux/penSlice";
 
 import Shape from "./shape";
 
 const Shapes: FunctionComponent = () => {
 
     const shapes = useSelector( selectShapes );
+    const activeShape = useSelector( selectActiveShape );
 
     return (
         <g>
-            { shapes?.length && shapes?.map( ( path, shapeIndex ) =>
+            { activeShape && <Shape shape={ activeShape } /> }
+            { shapes?.length && shapes?.map( shape =>
                 <Shape
-                    key={ shapeIndex }
-                    path={ path }
-                    shapeIndex={ shapeIndex }
+                    key={ shape.id }
+                    shape={ shape }
                 />
             ) }
         </g>

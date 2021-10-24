@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
-import { Coordinates } from "../types";
+import { Coordinates, Shape } from "../types";
 import { reflect } from "../utilities";
+
+const generateId = ( length: number ): string => [ ...Array( length ) ].reduce( result => result + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"[ Math.floor( Math.random() * 52 ) ], "" );
 
 interface PenState {
     points: Coordinates[];
-    shapes: Coordinates[][];
-    activeShape?: number
+    shapes: Shape[];
+    activeShape: Shape | null;
 }
 
 const initialState = {
     points: [],
-    shapes: []
+    shapes: [],
+    activeShape: null
 } as PenState;
 
 const penSlice = createSlice( {
@@ -24,21 +27,36 @@ const penSlice = createSlice( {
             if ( state.points.length < 5 ) return state;
             return {
                 ...state,
-                shapes: [ ...state.shapes, [
-                    ...state.points,
-                    { x: reflect( state.points[ 1 ].x, state.points[ 0 ].x ), y: reflect( state.points[ 1 ].y, state.points[ 0 ].y ) },
-                    { x: state.points[ 0 ].x, y: state.points[ 0 ].y },
-                    { x: state.points[ 0 ].x, y: state.points[ 0 ].y }
-                ] ],
+                shapes: [ ...state.shapes, {
+                    id: generateId( 5 ),
+                    points: [
+                        ...state.points,
+                        { x: reflect( state.points[ 1 ].x, state.points[ 0 ].x ), y: reflect( state.points[ 1 ].y, state.points[ 0 ].y ) },
+                        { x: state.points[ 0 ].x, y: state.points[ 0 ].y },
+                        { x: state.points[ 0 ].x, y: state.points[ 0 ].y }
+                    ]
+                } ],
                 points: [] 
             };
         },
         clearPoints: ( state ) => ( { ...state, points: [] } ),
-        activateShape: ( state, action: PayloadAction<number> ) => ( { ...state, activeShape: action.payload } ),
-        deactivateShapes: ( state ) => {
-            delete state.activeShape;
-            return state;
+        activateShape: ( state, action: PayloadAction<string> ) => {
+            const findShapeToActivate = state.shapes.find( ( { id } ) => id === action.payload );
+            return findShapeToActivate ? {
+                ...state,
+                shapes: [ ...( state.activeShape ? [ state.activeShape ] : [] ), ...state.shapes.filter( ( { id } ) => id !== action.payload ) ],
+                activeShape: findShapeToActivate
+            } : state;
         },
+        updateActiveShape: ( state, action: PayloadAction<Coordinates[]> ) => ( {
+            ...state,
+            activeShape: state.activeShape ? { id: state.activeShape.id, points: action.payload } : null
+        } ),
+        deactivateShapes: ( state ) => ( {
+            ...state,
+            shapes: state.activeShape ? [ state.activeShape, ...state.shapes ] : state.shapes,
+            activeShape: null
+        } )
     }
 } );
 
@@ -47,6 +65,7 @@ export const {
     closePath,
     clearPoints,
     activateShape,
+    updateActiveShape,
     deactivateShapes
 } = penSlice.actions;
 

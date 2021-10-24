@@ -21,10 +21,10 @@ const Pen: FunctionComponent = () => {
     const previousMouseDown = useRef<any>();
 
     useEffect( () => {
-        if ( mouseDown ) dispatch( deactivateShapes() );
-        if ( !mouseDown && previousMouseDown.current && previousMouse.current ) {
-            if ( points.length ) dispatch( addPoint( { x: reflect( previousMouse.current.x, previousMouseDown.current.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.y ) } ) );
-            dispatch( addPoint( { x: previousMouseDown.current.x, y: previousMouseDown.current.y } ) );
+        if ( mouseDown && !mouseDown.dataset ) dispatch( deactivateShapes() );
+        if ( !mouseDown && previousMouseDown.current && !previousMouseDown.current.dataset.pointIndex && previousMouse.current ) {
+            if ( points.length ) dispatch( addPoint( { x: reflect( previousMouse.current.x, previousMouseDown.current.coordinates.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.coordinates.y ) } ) );
+            dispatch( addPoint( { x: previousMouseDown.current.coordinates.x, y: previousMouseDown.current.coordinates.y } ) );
             dispatch( addPoint( { x: previousMouse.current.x, y: previousMouse.current.y } ) );
         }
         return () => {
@@ -37,19 +37,19 @@ const Pen: FunctionComponent = () => {
     return (
         <g>
 
-            { mouseDown && <g>
-                { points?.length && <circle cx={ reflect( mouse.x, mouseDown.x ) } cy={ reflect( mouse.y, mouseDown.y ) } r="5" fill="#f00" /> }
+            { mouseDown && !mouseDown.dataset.shapeId && !mouseDown.dataset.pointIndex && <g>
+                { points?.length && <circle cx={ reflect( mouse.x, mouseDown.coordinates.x ) } cy={ reflect( mouse.y, mouseDown.coordinates.y ) } r="5" fill="#f00" /> }
                 <circle cx={ mouse.x } cy={ mouse.y } r="5" fill="#f00" />
                 <line
                     x1={ mouse.x }
                     y1={ mouse.y }
-                    x2={ points?.length ? reflect( mouse.x, mouseDown.x ) : mouseDown.x }
-                    y2={ points?.length ? reflect( mouse.y, mouseDown.y ) : mouseDown.y }
+                    x2={ points?.length ? reflect( mouse.x, mouseDown.coordinates.x ) : mouseDown.coordinates.x }
+                    y2={ points?.length ? reflect( mouse.y, mouseDown.coordinates.y ) : mouseDown.coordinates.y }
                     stroke="#f00"
                 />
                 <circle
-                    cx={ mouseDown.x }
-                    cy={ mouseDown.y }
+                    cx={ mouseDown.coordinates.x }
+                    cy={ mouseDown.coordinates.y }
                     r={ points?.length ? "5" : "7" }
                     fill={ points?.length ? "#f00" : "white" }
                     stroke={ points?.length ? "none" : "#f00" }
