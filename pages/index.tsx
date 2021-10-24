@@ -4,7 +4,8 @@ import type { NextPage } from 'next'
 
 import { useCallback, useEffect } from 'react'
 import { useAppDispatch as useDispatch } from '../hooks'
-import { setMouse, setMouseDown, setMouseUp, setDimensions } from '../redux/clientSlice'
+import { setOffset } from '../redux/artboardSlice'
+import { setMouse, setMouseDown, setMouseUp, setClientDimensions } from '../redux/clientSlice'
 
 import Drawer from './drawer'
 import SvgWrapper from './svgWrapper'
@@ -22,12 +23,16 @@ const Home: NextPage = () => {
 
   const handleMouseMove = useCallback( mouseMoveEvent => dispatch( setMouse( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } ) ), [ dispatch ] );
 
-  const handleResize = useCallback( resizeEvent => dispatch( setDimensions( { height: resizeEvent.target.innerHeight, width: resizeEvent.target.innerWidth } ) ), [ dispatch ] );
+  const handleResize = useCallback( resizeEvent => dispatch( setClientDimensions( { height: resizeEvent.target.innerHeight, width: resizeEvent.target.innerWidth } ) ), [ dispatch ] );
 
   useEffect( () => {
-    dispatch( setDimensions( {
+    dispatch( setClientDimensions( {
       width: window.innerWidth || document.body.clientWidth,
       height: window.innerHeight || document.body.clientHeight
+    } ) );
+    dispatch( setOffset( {
+      x: ( document.documentElement.clientHeight - 800 ) / 2,
+      y: ( document.documentElement.clientWidth - 1000 ) / 2
     } ) );
     window.addEventListener( "mousedown", handleMouseDown );
     window.addEventListener( "mousemove", handleMouseMove );

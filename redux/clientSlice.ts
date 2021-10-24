@@ -14,7 +14,7 @@ const clientSlice = createSlice( {
     name: "client",
     initialState,
     reducers: {
-        setDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
+        setClientDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
         setMouse: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, mouse: action.payload } ),
         setMouseDown: ( state, action: PayloadAction<MouseDown> ) => ( { ...state, mouseDown: action.payload } ),
         setMouseUp: ( state ) => ( { ...state, mouseDown: null } )
@@ -22,13 +22,13 @@ const clientSlice = createSlice( {
 } );
 
 export const {
-    setDimensions,
+    setClientDimensions,
     setMouse,
     setMouseDown,
     setMouseUp
 } = clientSlice.actions;
 
-export const selectDimensions = ( state: RootState ) => state.client.dimensions;
+export const selectClientDimensions = ( state: RootState ) => state.client.dimensions;
 export const selectMouse = ( state: RootState ) => state.client.mouse;
 export const selectMouseDown = ( state: RootState ) => state.client.mouseDown;
 

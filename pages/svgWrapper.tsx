@@ -3,11 +3,11 @@ import { FunctionComponent } from "react";
 import styles from '../styles/Home.module.css'
 
 import { useAppSelector as useSelector } from "../hooks";
-import { selectDimensions } from "../redux/clientSlice";
+import { selectClientDimensions } from "../redux/clientSlice";
 
 const SvgWrapper: FunctionComponent = ( { children } ) => {
 
-    const dimensions = useSelector( selectDimensions );
+    const dimensions = useSelector( selectClientDimensions );
 
     return (
         <svg
