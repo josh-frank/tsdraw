@@ -6,9 +6,7 @@ import { useCallback, useEffect } from 'react'
 import { useAppDispatch as useDispatch } from '../hooks'
 import { setMouse, setMouseDown, setMouseUp, setDimensions } from '../redux/clientSlice'
 
-import Pen from './pen'
 import Drawer from './drawer'
-import Shapes from './shapes'
 import SvgWrapper from './svgWrapper'
 
 const Home: NextPage = () => {
@@ -16,11 +14,8 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
-    const { name, shapeId } = target.dataset;
-    if ( !( name || shapeId ) ) {
-      dispatch( setMouse( { x: clientX, y: clientY } ) );
-      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
-    }
+    dispatch( setMouse( { x: clientX, y: clientY } ) );
+    dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
   }, [ dispatch ] );
 
   const handleMouseUp = useCallback( () => dispatch( setMouseUp() ), [ dispatch ] );
@@ -50,8 +45,6 @@ const Home: NextPage = () => {
     <div>
 
       <SvgWrapper>
-        <Pen />
-        <Shapes />
       </SvgWrapper>
 
       <Drawer />

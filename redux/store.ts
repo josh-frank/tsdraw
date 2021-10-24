@@ -1,11 +1,9 @@
 import { configureStore  } from "@reduxjs/toolkit";
 import clientReducer from "./clientSlice"
-import penReducer from "./penSlice"
 
 export const store = configureStore( {
     reducer: {
-        client: clientReducer,
-        pen: penReducer,
+        client: clientReducer
     }
 } );
 
