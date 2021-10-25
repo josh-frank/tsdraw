@@ -100,9 +100,9 @@ const ArtboardOptions: FunctionComponent = () => {
                 /> • <input
                     type="checkbox"
                     name="display-grid"
-                    checked={ displayGrid }
+                    defaultChecked={ displayGrid }
                     onClick={ () => dispatch( toggleGridDisplay() ) }
-                />{ displayGrid ? "Hide" : "Show" } Grid • Grid interval:<input
+                /> Grid • Interval:<input
                     style={ { width: `${ gridInterval.toString().length + 1 }ch` } }
                     name="grid-interval"
                     value={ activeInputField && activeInputField.name === "grid-interval" ? activeInputField.value : gridInterval }

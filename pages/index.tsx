@@ -10,6 +10,8 @@ import Artboard from './artboard'
 import ArtboardOptions from './artboardOptions'
 
 import Drawer from './drawer'
+import Pen from './pen'
+import Shapes from './shapes'
 import SvgWrapper from './svgWrapper'
 
 const Home: NextPage = () => {
@@ -19,7 +21,8 @@ const Home: NextPage = () => {
   const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
     if ( target.tagName !== "BUTTON" ) {
       dispatch( setMouse( { x: clientX, y: clientY } ) );
-      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
+      const { name, shapeId, pointIndex } = target.dataset;
+      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: { name, shapeId, pointIndex } } ) );
     }
   }, [ dispatch ] );
 
@@ -56,6 +59,8 @@ const Home: NextPage = () => {
 
       <SvgWrapper>
         <Artboard />
+        <Pen />
+        <Shapes />
       </SvgWrapper>
 
       <Drawer />
