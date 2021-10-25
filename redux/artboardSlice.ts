@@ -12,7 +12,7 @@ interface ArtboardState {
 }
 
 const initialState = {
-        dimensions: { width: 1000, height: 800 },
+        dimensions: { width: 0, height: 0 },
         zoom: 100,
         offset: { x: 0, y: 0 },
         displayGrid: true,
@@ -27,6 +27,7 @@ const artboardSlice = createSlice( {
         setArtboardDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
         setZoom: ( state, action: PayloadAction<number> ) => ( { ...state, zoom: action.payload } ),
         setOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: action.payload } ),
+        moveOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: { x: state.offset.x - action.payload.x, y: state.offset.y - action.payload.y } } ),
         toggleGridDisplay: ( state ) => ( { ...state, displayGrid: !state.displayGrid } ),
         setGridInterval: ( state, action: PayloadAction<number> ) => ( { ...state, gridInterval: action.payload } ),
         toggleDarkMode: ( state ) => ( { ...state, darkMode: !state.darkMode } ),
@@ -37,6 +38,7 @@ export const {
     setArtboardDimensions,
     setZoom,
     setOffset,
+    moveOffset,
     toggleGridDisplay,
     setGridInterval,
     toggleDarkMode,

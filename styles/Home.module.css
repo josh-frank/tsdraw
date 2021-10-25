@@ -30,3 +30,7 @@
 
 .drawerButtonHiding { transform: none; }
 .drawerButtonShowing { transform: rotate( 180deg ); }
+
+.artboard {
+  outline: 1px solid #999;
+}

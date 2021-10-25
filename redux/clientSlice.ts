@@ -31,5 +31,6 @@ export const {
 export const selectClientDimensions = ( state: RootState ) => state.client.dimensions;
 export const selectMouse = ( state: RootState ) => state.client.mouse;
 export const selectMouseDown = ( state: RootState ) => state.client.mouseDown;
+export const selectDragDistance = ( state: RootState ) => state.client.mouseDown ? { x: state.client.mouse.x - state.client.mouseDown.coordinates.x, y: state.client.mouse.y - state.client.mouseDown.coordinates.y } : null;
 
 export default clientSlice.reducer;

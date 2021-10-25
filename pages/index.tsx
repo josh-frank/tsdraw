@@ -4,8 +4,9 @@ import type { NextPage } from 'next'
 
 import { useCallback, useEffect } from 'react'
 import { useAppDispatch as useDispatch } from '../hooks'
-import { setOffset } from '../redux/artboardSlice'
+import { setArtboardDimensions, setOffset } from '../redux/artboardSlice'
 import { setMouse, setMouseDown, setMouseUp, setClientDimensions } from '../redux/clientSlice'
+import Artboard from './artboard'
 
 import Drawer from './drawer'
 import SvgWrapper from './svgWrapper'
@@ -30,9 +31,10 @@ const Home: NextPage = () => {
       width: window.innerWidth || document.body.clientWidth,
       height: window.innerHeight || document.body.clientHeight
     } ) );
+    dispatch( setArtboardDimensions( { width: 500, height: 400 } ) );
     dispatch( setOffset( {
-      x: ( document.documentElement.clientHeight - 800 ) / 2,
-      y: ( document.documentElement.clientWidth - 1000 ) / 2
+      x: ( ( window.innerWidth || document.body.clientWidth ) - 500 ) / 2,
+      y: ( ( window.innerHeight || document.body.clientHeight ) - 400 ) / 2
     } ) );
     window.addEventListener( "mousedown", handleMouseDown );
     window.addEventListener( "mousemove", handleMouseMove );
@@ -50,6 +52,7 @@ const Home: NextPage = () => {
     <div>
 
       <SvgWrapper>
+        <Artboard />
       </SvgWrapper>
 
       <Drawer />
