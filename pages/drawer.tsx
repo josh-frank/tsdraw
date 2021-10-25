@@ -1,12 +1,14 @@
 import { FunctionComponent, useState } from "react"
-import { useAppSelector as useSelector } from "../hooks";
-import { selectAppMode } from "../redux/modeSlice";
+import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../hooks";
+import { selectAppMode, setAppMode } from "../redux/modeSlice";
 
 import styles from '../styles/Home.module.css'
 
 const Drawer: FunctionComponent = () => {
 
     const [ showDrawer, setShowDrawer ] = useState( false );
+
+    const dispatch = useDispatch();
 
     const appMode = useSelector( selectAppMode );
 
@@ -15,7 +17,18 @@ const Drawer: FunctionComponent = () => {
             className={ `${ styles.drawer } ${ showDrawer ? styles.showDrawer : styles.hideDrawer }` }
         >
             <div className={ styles.drawerContent }>
-                <button disabled={ appMode === "pan" }>🖐</button>
+                <button
+                    onClick={ () => dispatch( setAppMode( "pan" ) ) }
+                    disabled={ appMode === "pan" }
+                >
+                    🖐
+                </button>
+                <button
+                    onClick={ () => dispatch( setAppMode( "pen" ) ) }
+                    disabled={ appMode === "pen" }
+                >
+                    ✒️
+                </button>
             </div>
             <button
                 data-name="drawer-button"

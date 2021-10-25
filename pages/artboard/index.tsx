@@ -30,8 +30,8 @@ const Artboard: FunctionComponent = () => {
     return (
         <rect
             className={ styles.artboard }
-            x={ mouseDistance ? artboardOffset.x + mouseDistance.x : artboardOffset.x }
-            y={ mouseDistance ? artboardOffset.y + mouseDistance.y : artboardOffset.y }
+            x={ mouseDistance && appMode === "pan" ? artboardOffset.x + mouseDistance.x : artboardOffset.x }
+            y={ mouseDistance && appMode === "pan" ? artboardOffset.y + mouseDistance.y : artboardOffset.y }
             width={ width }
             height={ height }
             fill="none"

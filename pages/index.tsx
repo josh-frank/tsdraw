@@ -16,8 +16,10 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
-    dispatch( setMouse( { x: clientX, y: clientY } ) );
-    dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
+    if ( target.tagName !== "BUTTON" ) {
+      dispatch( setMouse( { x: clientX, y: clientY } ) );
+      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: target.dataset } ) );
+    }
   }, [ dispatch ] );
 
   const handleMouseUp = useCallback( () => dispatch( setMouseUp() ), [ dispatch ] );
