@@ -1,7 +1,7 @@
-import { FunctionComponent, MutableRefObject, useCallback, useEffect, useRef } from "react"
+import { FunctionComponent, useEffect, useRef } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { selectOffset, selectZoom } from "../../redux/artboardSlice";
+import { applyScaleAndOffset, unapplyScaleAndOffset, selectOffset, selectZoom } from "../../redux/artboardSlice";
 
 import { selectDragDistance, selectMouse, selectMouseDown } from "../../redux/clientSlice";
 import { selectAppMode } from "../../redux/modeSlice";
@@ -28,11 +28,11 @@ const Pen: FunctionComponent = () => {
     const previousMouse = useRef<Coordinates>();
     const previousMouseDown = useRef<MouseDown | null>();
 
-    const scaleAndOffset = useCallback( ( coordinates: Coordinates ): Coordinates => ( { x: ( coordinates.x - offset.x ) / zoom * 100, y: ( coordinates.y - offset.y ) / zoom * 100 } ), [ offset, zoom ] );
-    const unscaleAndUnoffset = useCallback( ( coordinates: Coordinates ): Coordinates => ( { x: offset.x + coordinates.x * zoom / 100, y: offset.y + coordinates.y * zoom / 100 } ), [ offset, zoom ] );
+    const scaleAndOffset = useSelector( applyScaleAndOffset );
+    const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
 
     useEffect( () => {
-        if ( mouseDown && mouseDown.dataset?.shapeId ) dispatch( deactivateShapes() );
+        if ( mouseDown && !mouseDown.dataset?.shapeId ) dispatch( deactivateShapes() );
         if ( appMode === "pen" && !mouseDown && previousMouseDown.current && previousMouse.current && !previousMouseDown.current.dataset?.shapeId && !previousMouseDown.current.dataset?.pointIndex && previousMouseDown.current.dataset?.name !== "close-path" ) {
             if ( points.length ) dispatch( addPoint( scaleAndOffset( { x: reflect( previousMouse.current.x, previousMouseDown.current.coordinates.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.coordinates.y ) } ) ) );
             dispatch( addPoint( scaleAndOffset( { x: previousMouseDown.current.coordinates.x, y: previousMouseDown.current.coordinates.y } ) ) );

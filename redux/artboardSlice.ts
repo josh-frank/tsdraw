@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { createSelector } from 'reselect'
+
 import { Coordinates, Dimensions } from "../types";
+
 import { RootState } from "./store";
 
 interface ArtboardState {
@@ -50,5 +54,8 @@ export const selectOffset = ( state: RootState ) => state.artboard.offset;
 export const selectDisplayGrid = ( state: RootState ) => state.artboard.displayGrid;
 export const selectGridInterval = ( state: RootState ) => state.artboard.gridInterval;
 export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
+
+export const applyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: ( coordinates.x - offset.x ) / zoom * 100, y: ( coordinates.y - offset.y ) / zoom * 100 } ) );
+export const unapplyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: offset.x + coordinates.x * zoom / 100, y: offset.y + coordinates.y * zoom / 100 } ) );
 
 export default artboardSlice.reducer;
