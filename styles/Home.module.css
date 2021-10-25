@@ -48,6 +48,7 @@
 .artboardOptionsContent {
   height: 5vh;
   padding: 1vh;
+  font-size: 10pt;
 }
 
 .artboardOptionsContent input {
