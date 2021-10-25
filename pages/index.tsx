@@ -7,6 +7,7 @@ import { useAppDispatch as useDispatch } from '../hooks'
 import { setArtboardDimensions, setOffset } from '../redux/artboardSlice'
 import { setMouse, setMouseDown, setMouseUp, setClientDimensions } from '../redux/clientSlice'
 import Artboard from './artboard'
+import ArtboardOptions from './artboardOptions'
 
 import Drawer from './drawer'
 import SvgWrapper from './svgWrapper'
@@ -58,6 +59,7 @@ const Home: NextPage = () => {
       </SvgWrapper>
 
       <Drawer />
+      <ArtboardOptions />
 
     </div>
   );

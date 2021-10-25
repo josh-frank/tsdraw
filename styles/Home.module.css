@@ -34,3 +34,36 @@
 .artboard {
   outline: 1px solid #999;
 }
+
+.artboardOptions {
+  position: absolute;
+  right: 1vw;
+  width: 40vw;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  transition: bottom 0.25s ease;
+}
+
+.artboardOptionsContent {
+  height: 5vh;
+  padding: 1vh;
+}
+
+.artboardOptionsContent input {
+  border: none;
+  background-color: transparent;
+}
+
+.showArtboardOptions { bottom: 0; }
+.hideArtboardOptions { bottom: -5vh; }
+
+.artboardOptionsButton {
+  width: 100%;
+  background: none;
+  border: none;
+  transition: transform 0.25s ease;
+}
+
+.artboardOptionsButtonHiding { transform: none; }
+.artboardOptionsButtonShowing { transform: rotate( 180deg ); }

@@ -48,6 +48,7 @@ export const selectArtboardDimensions = ( state: RootState ) => state.artboard.d
 export const selectZoom = ( state: RootState ) => state.artboard.zoom;
 export const selectOffset = ( state: RootState ) => state.artboard.offset;
 export const selectDisplayGrid = ( state: RootState ) => state.artboard.displayGrid;
+export const selectGridInterval = ( state: RootState ) => state.artboard.gridInterval;
 export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
 
 export default artboardSlice.reducer;
