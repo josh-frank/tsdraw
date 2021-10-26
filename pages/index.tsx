@@ -48,6 +48,9 @@ const Home: NextPage = () => {
       x: ( ( window.innerWidth || document.body.clientWidth ) - 500 ) / 2,
       y: ( ( window.innerHeight || document.body.clientHeight ) - 400 ) / 2
     } ) );
+  }, [ dispatch ] );
+
+  useEffect( () => {
     window.addEventListener( "mousedown", handleMouseDown );
     window.addEventListener( "mousemove", handleMouseMove );
     window.addEventListener( "mouseup", handleMouseUp );
