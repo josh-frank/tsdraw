@@ -32,7 +32,7 @@ const Pen: FunctionComponent = () => {
     const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
 
     useEffect( () => {
-        if ( mouseDown && !mouseDown.dataset?.shapeId ) dispatch( deactivateShapes() );
+        if ( mouseDown && mouseDown.dataset?.name === "shape" ) dispatch( deactivateShapes() );
         if ( appMode === "pen" && !mouseDown && previousMouseDown.current && previousMouse.current && !previousMouseDown.current.dataset?.shapeId && !previousMouseDown.current.dataset?.pointIndex && previousMouseDown.current.dataset?.name !== "close-path" ) {
             if ( points.length ) dispatch( addPoint( scaleAndOffset( { x: reflect( previousMouse.current.x, previousMouseDown.current.coordinates.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.coordinates.y ) } ) ) );
             dispatch( addPoint( scaleAndOffset( { x: previousMouseDown.current.coordinates.x, y: previousMouseDown.current.coordinates.y } ) ) );

@@ -24,7 +24,7 @@ const Shape = ( { shape }: ShapeProps ): JSX.Element => {
 
     const appMode = useSelector( selectAppMode );
 
-    const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset)
+    const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
 
     const isActive = shape.id === activeShape?.id;
 
@@ -36,6 +36,7 @@ const Shape = ( { shape }: ShapeProps ): JSX.Element => {
         <g>
 
             <path
+                data-name="shape"
                 data-shape-id={ shape.id }
                 d={ toPath( unscaledShapePoints.map( point => mouseDistance && appMode === "pan" ? vectorAddition( point, mouseDistance ) : point ) ) }
                 stroke={ isActive || hovering ? "red" : "black" }
