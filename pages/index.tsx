@@ -21,8 +21,7 @@ const Home: NextPage = () => {
   const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
     if ( target.tagName !== "BUTTON" ) {
       dispatch( setMouse( { x: clientX, y: clientY } ) );
-      const { name, shapeId, pointIndex } = target.dataset;
-      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: { name, shapeId, pointIndex } } ) );
+      dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: { ...target.dataset } } ) );
     }
   }, [ dispatch ] );
 
