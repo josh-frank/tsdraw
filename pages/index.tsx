@@ -3,9 +3,10 @@ import type { NextPage } from 'next'
 // import Image from 'next/image'
 
 import { useCallback, useEffect } from 'react'
-import { useAppDispatch as useDispatch } from '../hooks'
-import { setArtboardDimensions, setOffset } from '../redux/artboardSlice'
+import { useAppDispatch as useDispatch, useAppSelector as useSelector } from '../hooks'
+import { setArtboardDimensions, setOffset, zoomIn, zoomOut } from '../redux/artboardSlice'
 import { setMouse, setMouseDown, setMouseUp, setClientDimensions } from '../redux/clientSlice'
+import { selectAppMode } from '../redux/modeSlice'
 import Artboard from './artboard'
 import ArtboardOptions from './artboardOptions'
 
@@ -18,8 +19,10 @@ const Home: NextPage = () => {
   
   const dispatch = useDispatch();
 
+  const appMode = useSelector( selectAppMode );
+
   const handleMouseDown = useCallback( ( { target, clientX, clientY } ) => {
-    if ( target.tagName !== "BUTTON" ) {
+    if ( ![ "drawer", "drawer-content" ].includes( target.parentNode.dataset.name ) ) {
       dispatch( setMouse( { x: clientX, y: clientY } ) );
       dispatch( setMouseDown( { coordinates: { x: clientX, y: clientY }, dataset: { ...target.dataset } } ) );
     }
@@ -30,6 +33,10 @@ const Home: NextPage = () => {
   const handleMouseMove = useCallback( mouseMoveEvent => dispatch( setMouse( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } ) ), [ dispatch ] );
 
   const handleResize = useCallback( resizeEvent => dispatch( setClientDimensions( { height: resizeEvent.target.innerHeight, width: resizeEvent.target.innerWidth } ) ), [ dispatch ] );
+
+  const handleWheel = useCallback( ( { deltaY } ) => {
+    if ( deltaY && appMode === "pan" ) dispatch( deltaY > 0 ? zoomIn() : zoomOut() );
+  }, [ dispatch, appMode ] );
 
   useEffect( () => {
     dispatch( setClientDimensions( {
@@ -45,13 +52,15 @@ const Home: NextPage = () => {
     window.addEventListener( "mousemove", handleMouseMove );
     window.addEventListener( "mouseup", handleMouseUp );
     window.addEventListener( "resize", handleResize );
+    window.addEventListener( "wheel", handleWheel );
     return () => {
       window.removeEventListener( "mousedown", handleMouseDown );
       window.removeEventListener( "mousemove", handleMouseMove );
       window.removeEventListener( "mouseup", handleMouseUp );
       window.removeEventListener( "resize", handleResize );
+      window.removeEventListener( "wheel", handleWheel );
     };
-  }, [ dispatch, handleMouseDown, handleMouseMove, handleMouseUp, handleResize ] );
+  }, [ dispatch, handleMouseDown, handleMouseMove, handleMouseUp, handleResize, handleWheel ] );
 
   return (
     <div>

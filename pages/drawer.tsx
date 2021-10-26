@@ -14,9 +14,13 @@ const Drawer: FunctionComponent = () => {
 
     return (
         <div
+            data-name="drawer"
             className={ `${ styles.drawer } ${ showDrawer ? styles.showDrawer : styles.hideDrawer }` }
         >
-            <div className={ styles.drawerContent }>
+            <div
+                data-name="drawer-content"
+                className={ styles.drawerContent }
+            >
                 <button
                     onClick={ () => dispatch( setAppMode( "pan" ) ) }
                     disabled={ appMode === "pan" }

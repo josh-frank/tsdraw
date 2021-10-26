@@ -52,6 +52,7 @@ const ArtboardOptions: FunctionComponent = () => {
 
     return (
         <div
+            data-name="drawer"
             className={ `${ styles.artboardOptions } ${ showDrawer ? styles.showArtboardOptions : styles.hideArtboardOptions }` }
         >
             <button
@@ -61,7 +62,10 @@ const ArtboardOptions: FunctionComponent = () => {
             >
                 ▲
             </button>
-            <div className={ styles.artboardOptionsContent }>
+            <div
+                data-name="drawer-content"
+                className={ styles.artboardOptionsContent }
+            >
                 📐 <input
                     style={ { width: `${ artboardDimensions.width.toString().length + 1 }ch` } }
                     name="artboard-width"

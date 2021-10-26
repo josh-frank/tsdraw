@@ -30,6 +30,8 @@ const artboardSlice = createSlice( {
     reducers: {
         setArtboardDimensions: ( state, action: PayloadAction<Dimensions> ) => ( { ...state, dimensions: action.payload } ),
         setZoom: ( state, action: PayloadAction<number> ) => ( { ...state, zoom: action.payload } ),
+        zoomIn: ( state ) => ( { ...state, zoom: Math.min( state.zoom + 6.25, 625 ) } ),
+        zoomOut: ( state ) => ( { ...state, zoom: Math.max( state.zoom - 6.25, 6.25 ) } ),
         setOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: action.payload } ),
         moveOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: { x: state.offset.x - action.payload.x, y: state.offset.y - action.payload.y } } ),
         toggleGridDisplay: ( state ) => ( { ...state, displayGrid: !state.displayGrid } ),
@@ -41,6 +43,8 @@ const artboardSlice = createSlice( {
 export const {
     setArtboardDimensions,
     setZoom,
+    zoomIn,
+    zoomOut,
     setOffset,
     moveOffset,
     toggleGridDisplay,
