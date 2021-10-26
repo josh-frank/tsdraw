@@ -6,6 +6,7 @@ import { selectMouse, selectMouseDown } from "../../redux/clientSlice";
 import { selectAppMode } from "../../redux/modeSlice";
 import { selectActiveShape, selectShapes, updateActiveShape } from "../../redux/penSlice";
 import { Coordinates, MouseDown } from "../../types";
+import { vectorEquality } from "../../utilities";
 
 import Shape from "./shape";
 
@@ -34,12 +35,10 @@ const Shapes: FunctionComponent = () => {
     }, [ mouse, mouseDown ] );
 
     useEffect( () => {
-        if ( appMode === "pen" && mouseDown && previousMouse.current && previousMouseDown.current && previousMouseDown.current.dataset ) {
-            let updatedActiveShapePoints = [ ...( activeShape?.points || [] ) ];
-            if ( mouseDown && previousMouseDown.current.dataset.pointIndex ) {
-                updatedActiveShapePoints[ previousMouseDown.current.dataset.pointIndex ] = scaleAndOffset( previousMouse.current );
-                dispatch( updateActiveShape( updatedActiveShapePoints ) );
-            }
+        if ( appMode === "pen" && mouseDown && previousMouse.current && previousMouseDown.current?.dataset.pointIndex && !vectorEquality( mouse, previousMouse.current ) ) {
+            const updatedActiveShapePoints = [ ...( activeShape?.points || [] ) ];
+            updatedActiveShapePoints[ previousMouseDown.current.dataset.pointIndex ] = scaleAndOffset( previousMouse.current );
+            dispatch( updateActiveShape( updatedActiveShapePoints ) );
         }
     }, [ dispatch, appMode, mouse, mouseDown, activeShape, scaleAndOffset ] );
 
