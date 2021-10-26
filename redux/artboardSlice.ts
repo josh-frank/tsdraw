@@ -11,6 +11,7 @@ interface ArtboardState {
     zoom: number,
     offset: Coordinates,
     displayGrid: boolean,
+    snapToGrid: boolean,
     gridInterval: number,
     darkMode: boolean
 }
@@ -20,6 +21,7 @@ const initialState = {
         zoom: 100,
         offset: { x: 0, y: 0 },
         displayGrid: true,
+        snapToGrid: false,
         gridInterval: 10,
         darkMode: false
     } as ArtboardState;
@@ -35,6 +37,7 @@ const artboardSlice = createSlice( {
         setOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: action.payload } ),
         moveOffset: ( state, action: PayloadAction<Coordinates> ) => ( { ...state, offset: { x: state.offset.x - action.payload.x, y: state.offset.y - action.payload.y } } ),
         toggleGridDisplay: ( state ) => ( { ...state, displayGrid: !state.displayGrid } ),
+        toggleSnapToGrid: ( state ) => ( { ...state, snapToGrid: !state.snapToGrid } ),
         setGridInterval: ( state, action: PayloadAction<number> ) => ( { ...state, gridInterval: action.payload } ),
         toggleDarkMode: ( state ) => ( { ...state, darkMode: !state.darkMode } ),
     }
@@ -48,6 +51,7 @@ export const {
     setOffset,
     moveOffset,
     toggleGridDisplay,
+    toggleSnapToGrid,
     setGridInterval,
     toggleDarkMode,
 } = artboardSlice.actions;
@@ -56,6 +60,7 @@ export const selectArtboardDimensions = ( state: RootState ) => state.artboard.d
 export const selectZoom = ( state: RootState ) => state.artboard.zoom;
 export const selectOffset = ( state: RootState ) => state.artboard.offset;
 export const selectDisplayGrid = ( state: RootState ) => state.artboard.displayGrid;
+export const selectSnapToGrid = ( state: RootState ) => state.artboard.snapToGrid;
 export const selectGridInterval = ( state: RootState ) => state.artboard.gridInterval;
 export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
 

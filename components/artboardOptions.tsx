@@ -2,7 +2,7 @@ import { FunctionComponent, useState } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../hooks";
 
-import { selectArtboardDimensions, selectDarkMode, selectDisplayGrid, selectGridInterval, selectOffset, selectZoom, setArtboardDimensions, setGridInterval, setOffset, setZoom, toggleGridDisplay } from "../redux/artboardSlice";
+import { selectArtboardDimensions, selectDarkMode, selectDisplayGrid, selectGridInterval, selectOffset, selectSnapToGrid, selectZoom, setArtboardDimensions, setGridInterval, setOffset, setZoom, toggleGridDisplay, toggleSnapToGrid } from "../redux/artboardSlice";
 
 import styles from '../styles/Home.module.css'
 
@@ -22,6 +22,7 @@ const ArtboardOptions: FunctionComponent = () => {
     const zoom = useSelector( selectZoom );
     const offset = useSelector( selectOffset );
     const displayGrid = useSelector( selectDisplayGrid );
+    const snapToGrid = useSelector( selectSnapToGrid );
     const gridInterval = useSelector( selectGridInterval );
     const darkMode = useSelector( selectDarkMode );
 
@@ -106,7 +107,12 @@ const ArtboardOptions: FunctionComponent = () => {
                     name="display-grid"
                     defaultChecked={ displayGrid }
                     onClick={ () => dispatch( toggleGridDisplay() ) }
-                /> Grid • Interval:<input
+                /> ⌗ • <input
+                    type="checkbox"
+                    name="snap-to-grid"
+                    defaultChecked={ snapToGrid }
+                    onClick={ () => dispatch( toggleSnapToGrid() ) }
+                /> 👌 • Interval:<input
                     style={ { width: `${ gridInterval.toString().length + 1 }ch` } }
                     name="grid-interval"
                     value={ activeInputField && activeInputField.name === "grid-interval" ? activeInputField.value : gridInterval }

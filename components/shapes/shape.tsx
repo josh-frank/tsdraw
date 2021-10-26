@@ -38,7 +38,7 @@ const Shape = ( { shape }: ShapeProps ): JSX.Element => {
             <path
                 data-name="shape"
                 data-shape-id={ shape.id }
-                d={ toPath( unscaledShapePoints.map( point => mouseDistance && appMode === "pan" ? vectorAddition( point, mouseDistance ) : point ) ) }
+                d={ toPath( mouseDistance && appMode === "pan" ? unscaledShapePoints.map( point => vectorAddition( point, mouseDistance ) ) : unscaledShapePoints, true ) }
                 stroke={ isActive || hovering ? "red" : "black" }
                 fill="white"
                 onMouseEnter={ () => setHovering( true ) }

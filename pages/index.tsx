@@ -7,13 +7,13 @@ import { useAppDispatch as useDispatch, useAppSelector as useSelector } from '..
 import { setArtboardDimensions, setOffset, zoomIn, zoomOut } from '../redux/artboardSlice'
 import { setMouse, setMouseDown, setMouseUp, setClientDimensions } from '../redux/clientSlice'
 import { selectAppMode } from '../redux/modeSlice'
-import Artboard from './artboard'
-import ArtboardOptions from './artboardOptions'
+import Artboard from '../components/artboard'
+import ArtboardOptions from '../components/artboardOptions'
 
-import Drawer from './drawer'
-import Pen from './pen'
-import Shapes from './shapes'
-import SvgWrapper from './svgWrapper'
+import Drawer from '../components/drawer'
+import Pen from '../components/pen'
+import Shapes from '../components/shapes'
+import SvgWrapper from '../components/svgWrapper'
 
 const Home: NextPage = () => {
   

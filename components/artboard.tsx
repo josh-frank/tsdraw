@@ -33,17 +33,17 @@ const Artboard: FunctionComponent = () => {
 
     const horizontalLines = gridLineSpacing( height, gridInterval ).map( line => {
         return <g key={ line }>
-            <text
-                x={ offset.x + 0.25 + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+            { !!line && <text
+                x={ offset.x + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
                 y={ ( offset.y + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 fill="lightgray"
                 fontFamily="Arial Narrow"
-                fontSize="3px"
+                fontSize={ `${ zoom / 33.3 }px`}
                 letterSpacing="-0.2px"
                 transform="translate( 0, -0.5 )"
             >
                 { line }
-            </text> 
+            </text> }
             <line
                 x1={ offset.x + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
                 y1={ ( offset.y + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
@@ -57,18 +57,18 @@ const Artboard: FunctionComponent = () => {
 
     const verticalLines = gridLineSpacing( width, gridInterval ).map( line => {
         return <g key={ line }>
-            <text
-                x={ ( offset.x + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y={ offset.y + 0.25 + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+            { !!line && <text
+                x={ ( offset.x + ( zoom / 75 ) + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y={ offset.y + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 fill="lightgray"
                 writingMode="vertical-rl"
                 fontFamily="Arial Narrow"
-                fontSize="3px"
+                fontSize={ `${ zoom / 33.3 }px`}
                 letterSpacing="-0.2px"
                 transform="translate( 2 )"
             >
                 { line }
-            </text> 
+            </text> }
             <line
                 x1={ ( offset.x + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
                 y1={ offset.y + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
