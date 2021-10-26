@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useRef } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { applyScaleAndOffset, unapplyScaleAndOffset, selectOffset, selectZoom } from "../../redux/artboardSlice";
+import { applyScaleAndOffset, unapplyScaleAndOffset, selectOffset, selectZoom, selectSnapToGrid, snapCoordinatesToGrid } from "../../redux/artboardSlice";
 
 import { selectDragDistance, selectMouse, selectMouseDown } from "../../redux/clientSlice";
 import { selectAppMode } from "../../redux/modeSlice";
@@ -20,6 +20,7 @@ const Pen: FunctionComponent = () => {
 
     const zoom = useSelector( selectZoom );
     const offset = useSelector( selectOffset );
+    const snapToGrid = useSelector( selectSnapToGrid );
 
     const appMode = useSelector( selectAppMode );
     
@@ -30,13 +31,15 @@ const Pen: FunctionComponent = () => {
 
     const scaleAndOffset = useSelector( applyScaleAndOffset );
     const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
+    const snapCoordinates = useSelector( snapCoordinatesToGrid );
 
     useEffect( () => {
         if ( mouseDown && mouseDown.dataset?.name === "shape" ) dispatch( deactivateShapes() );
         if ( appMode === "pen" && !mouseDown && previousMouseDown.current && previousMouse.current && !previousMouseDown.current.dataset?.shapeId && !previousMouseDown.current.dataset?.pointIndex && previousMouseDown.current.dataset?.name !== "close-path" ) {
-            if ( points.length ) dispatch( addPoint( scaleAndOffset( { x: reflect( previousMouse.current.x, previousMouseDown.current.coordinates.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.coordinates.y ) } ) ) );
-            dispatch( addPoint( scaleAndOffset( { x: previousMouseDown.current.coordinates.x, y: previousMouseDown.current.coordinates.y } ) ) );
-            dispatch( addPoint( scaleAndOffset( { x: previousMouse.current.x, y: previousMouse.current.y } ) ) );
+            const reflectMouse = { x: reflect( previousMouse.current.x, previousMouseDown.current.coordinates.x ), y: reflect( previousMouse.current.y, previousMouseDown.current.coordinates.y ) }
+            if ( points.length ) dispatch( addPoint( scaleAndOffset( reflectMouse ) ) );
+            dispatch( addPoint( scaleAndOffset( previousMouseDown.current.coordinates ) ) );
+            dispatch( addPoint( scaleAndOffset( previousMouse.current ) ) );
         }
         return () => {
             previousMouse.current = mouse;
@@ -46,8 +49,14 @@ const Pen: FunctionComponent = () => {
 
     const unscaledPoints = points.map( unscaleAndUnoffset );
 
+    const snappedMouse = mouse && snapCoordinates( mouse );
+    const snappedMouseDown = mouseDown && snapCoordinates( mouseDown.coordinates );
+
     return (
         <g>
+
+            { snappedMouse && <circle cx={ snappedMouse.x } cy={ snappedMouse.y } r="5" /> }
+            { snappedMouseDown && <circle cx={ snappedMouseDown.x } cy={ snappedMouseDown.y } r="5" /> }
 
             { mouseDown && !mouseDown.dataset.pointIndex && appMode === "pen" && <g>
                 { points?.length && <circle cx={ reflect( mouse.x, mouseDown.coordinates.x ) } cy={ reflect( mouse.y, mouseDown.coordinates.y ) } r="5" fill="#f00" /> }

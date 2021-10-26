@@ -66,5 +66,12 @@ export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
 
 export const applyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: ( coordinates.x - offset.x ) / zoom * 100, y: ( coordinates.y - offset.y ) / zoom * 100 } ) );
 export const unapplyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: offset.x + coordinates.x * zoom / 100, y: offset.y + coordinates.y * zoom / 100 } ) );
+export const snapCoordinatesToGrid = createSelector( selectZoom, selectOffset, selectGridInterval, ( zoom, offset, gridInterval ) => ( coordinates: Coordinates ): Coordinates => {
+    const zoomGridInterval = gridInterval * zoom / 100;
+    return {
+        x: ( Math.floor( coordinates.x / zoomGridInterval ) * zoomGridInterval ) + ( offset.x % zoomGridInterval ),
+        y: ( Math.floor( coordinates.y / zoomGridInterval ) * zoomGridInterval ) + ( offset.y % zoomGridInterval )
+    };
+} );
 
 export default artboardSlice.reducer;

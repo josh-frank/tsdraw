@@ -3,7 +3,7 @@ import { RootState } from "./store";
 
 const modeSlice = createSlice( {
     name: "mode",
-    initialState: "pen",
+    initialState: "pan",
     reducers: {
         setAppMode: ( state, action: PayloadAction<string> ) => action.payload,
     }
