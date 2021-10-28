@@ -34,8 +34,8 @@ const Artboard: FunctionComponent = () => {
     const horizontalLines = gridLineSpacing( height, gridInterval ).map( line => {
         return <g key={ line }>
             { !!line && <text
-                x={ offset.x + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y={ ( offset.y + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+                x={ ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y={ ( line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 fill="lightgray"
                 fontFamily="Arial Narrow"
                 fontSize={ `${ zoom / 33.3 }px`}
@@ -45,10 +45,10 @@ const Artboard: FunctionComponent = () => {
                 { line }
             </text> }
             <line
-                x1={ offset.x + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y1={ ( offset.y + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
-                x2={ ( offset.x + width * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y2={ ( offset.y + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+                x1={ ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y1={ ( line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+                x2={ ( width * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y2={ ( line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 stroke="lightgray"
                 strokeWidth="0.5"
             />
@@ -57,9 +57,9 @@ const Artboard: FunctionComponent = () => {
 
     const verticalLines = gridLineSpacing( width, gridInterval ).map( line => {
         return <g key={ line }>
-            { !!line && <text
-                x={ ( offset.x + ( zoom / 75 ) + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y={ offset.y + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+            { !!line && line < width && <text
+                x={ ( ( zoom / 75 ) + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y={ ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 fill="lightgray"
                 writingMode="vertical-rl"
                 fontFamily="Arial Narrow"
@@ -70,10 +70,10 @@ const Artboard: FunctionComponent = () => {
                 { line }
             </text> }
             <line
-                x1={ ( offset.x + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y1={ offset.y + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
-                x2={ ( offset.x + line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
-                y2={ ( offset.y + height * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+                x1={ ( line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y1={ ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
+                x2={ ( line * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.x : 0 ) }
+                y2={ ( height * zoom / 100 ) + ( mouseDistance && appMode === "pan" ? mouseDistance.y : 0 ) }
                 stroke="lightgray"
                 strokeWidth="0.5"
             />
@@ -86,10 +86,11 @@ const Artboard: FunctionComponent = () => {
             { displayGrid && verticalLines }
             <rect
                 className={ styles.artboard }
-                x={ mouseDistance && appMode === "pan" ? artboardOffset.x + mouseDistance.x : artboardOffset.x }
-                y={ mouseDistance && appMode === "pan" ? artboardOffset.y + mouseDistance.y : artboardOffset.y }
+                x={ mouseDistance && appMode === "pan" ? mouseDistance.x : 0 }
+                y={ mouseDistance && appMode === "pan" ? mouseDistance.y : 0 }
                 width={ width * zoom / 100 }
                 height={ height * zoom / 100 }
+                stroke={ displayGrid ? "none" : "lightgray" }
                 fill="none"
             />
         </g>

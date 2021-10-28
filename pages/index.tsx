@@ -70,8 +70,8 @@ const Home: NextPage = () => {
 
       <SvgWrapper>
         <Artboard />
-        <Pen />
-        <Shapes />
+        {/* <Pen /> */}
+        {/* <Shapes /> */}
       </SvgWrapper>
 
       <Drawer />

@@ -64,14 +64,12 @@ export const selectSnapToGrid = ( state: RootState ) => state.artboard.snapToGri
 export const selectGridInterval = ( state: RootState ) => state.artboard.gridInterval;
 export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
 
+export const applyScale = createSelector( selectZoom, ( zoom ) => ( coordinates: Coordinates ): Coordinates => ( { x: coordinates.x / zoom * 100, y: coordinates.y / zoom * 100 } ) );
 export const applyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: ( coordinates.x - offset.x ) / zoom * 100, y: ( coordinates.y - offset.y ) / zoom * 100 } ) );
 export const unapplyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: offset.x + coordinates.x * zoom / 100, y: offset.y + coordinates.y * zoom / 100 } ) );
-export const snapCoordinatesToGrid = createSelector( selectZoom, selectOffset, selectGridInterval, ( zoom, offset, gridInterval ) => ( coordinates: Coordinates ): Coordinates => {
-    const zoomGridInterval = gridInterval * zoom / 100;
-    return {
-        x: ( Math.floor( coordinates.x / zoomGridInterval ) * zoomGridInterval ) + ( offset.x % zoomGridInterval ),
-        y: ( Math.floor( coordinates.y / zoomGridInterval ) * zoomGridInterval ) + ( offset.y % zoomGridInterval )
-    };
-} );
+export const snapCoordinatesToGrid = createSelector( selectZoom, selectOffset, selectGridInterval, ( zoom, offset, gridInterval ) => ( coordinates: Coordinates ): Coordinates => ( {
+    x: ( Math.round( ( coordinates.x - offset.x ) / ( gridInterval * zoom / 100 ) ) * ( gridInterval * zoom / 100 ) ),
+    y: ( Math.round( ( coordinates.y - offset.y ) / ( gridInterval * zoom / 100 ) ) * ( gridInterval * zoom / 100 ) )
+} ) );
 
 export default artboardSlice.reducer;
