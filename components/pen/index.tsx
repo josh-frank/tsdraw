@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useRef } from "react"
 
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { applyScaleAndOffset, unapplyScaleAndOffset, selectOffset, selectZoom, selectSnapToGrid, snapCoordinatesToGrid } from "../../redux/artboardSlice";
+import { applyScaleAndOffset, selectOffset, selectSnapToGrid, selectZoom, snapCoordinatesToGrid, unapplyOffset, unapplyScale } from "../../redux/artboardSlice";
 
 import { selectDragDistance, selectMouse, selectMouseDown } from "../../redux/clientSlice";
 import { selectAppMode } from "../../redux/modeSlice";
@@ -21,17 +21,22 @@ const Pen: FunctionComponent = () => {
     const zoom = useSelector( selectZoom );
     const offset = useSelector( selectOffset );
     const snapToGrid = useSelector( selectSnapToGrid );
+    const unscale = useSelector( unapplyScale );
+    const unoffset = useSelector( unapplyOffset );
+    const scaleAndOffset = useSelector( applyScaleAndOffset );
+    const snapCoordinates = useSelector( snapCoordinatesToGrid );
+
+    const scaledMouse = mouse && unoffset( mouse );
+    const scaledMouseDown = mouseDown && unoffset( mouseDown.coordinates );
 
     const appMode = useSelector( selectAppMode );
     
     const points = useSelector( selectPoints );
+    
+    const unscaledPoints = points.map( unscale );
 
     const previousMouse = useRef<Coordinates>();
     const previousMouseDown = useRef<MouseDown | null>();
-
-    const scaleAndOffset = useSelector( applyScaleAndOffset );
-    const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
-    const snapCoordinates = useSelector( snapCoordinatesToGrid );
 
     useEffect( () => {
         if ( mouseDown && mouseDown.dataset?.name === "shape" ) dispatch( deactivateShapes() );
@@ -47,30 +52,22 @@ const Pen: FunctionComponent = () => {
         };
     }, [ dispatch, appMode, mouse, mouseDown, zoom, offset, points, scaleAndOffset ] );
 
-    const unscaledPoints = points.map( unscaleAndUnoffset );
-
-    const snappedMouse = mouse && snapCoordinates( mouse );
-    const snappedMouseDown = mouseDown && snapCoordinates( mouseDown.coordinates );
-
     return (
         <g>
 
-            { snappedMouse && <circle cx={ snappedMouse.x } cy={ snappedMouse.y } r="5" /> }
-            { snappedMouseDown && <circle cx={ snappedMouseDown.x } cy={ snappedMouseDown.y } r="5" /> }
-
-            { mouseDown && !mouseDown.dataset.pointIndex && appMode === "pen" && <g>
-                { points?.length && <circle cx={ reflect( mouse.x, mouseDown.coordinates.x ) } cy={ reflect( mouse.y, mouseDown.coordinates.y ) } r="5" fill="#f00" /> }
-                <circle cx={ mouse.x } cy={ mouse.y } r="5" fill="#f00" />
+            { scaledMouseDown && !mouseDown.dataset.pointIndex && appMode === "pen" && <g>
+                { points?.length && <circle cx={ reflect( scaledMouse.x, scaledMouseDown.x ) } cy={ reflect( scaledMouse.y, scaledMouseDown.y ) } r="5" fill="#f00" /> }
+                <circle cx={ scaledMouse.x } cy={ scaledMouse.y } r="5" fill="#f00" />
                 <line
-                    x1={ mouse.x }
-                    y1={ mouse.y }
-                    x2={ points?.length ? reflect( mouse.x, mouseDown.coordinates.x ) : mouseDown.coordinates.x }
-                    y2={ points?.length ? reflect( mouse.y, mouseDown.coordinates.y ) : mouseDown.coordinates.y }
+                    x1={ scaledMouse.x }
+                    y1={ scaledMouse.y }
+                    x2={ points?.length ? reflect( scaledMouse.x, scaledMouseDown.x ) : scaledMouseDown.x }
+                    y2={ points?.length ? reflect( scaledMouse.y, scaledMouseDown.y ) : scaledMouseDown.y }
                     stroke="#f00"
                 />
                 <circle
-                    cx={ mouseDown.coordinates.x }
-                    cy={ mouseDown.coordinates.y }
+                    cx={ scaledMouseDown.x }
+                    cy={ scaledMouseDown.y }
                     r={ points?.length ? "5" : "7" }
                     fill={ points?.length ? "#f00" : "white" }
                     stroke={ points?.length ? "none" : "#f00" }

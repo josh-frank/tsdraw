@@ -8,17 +8,17 @@ import { selectOffset } from "../redux/artboardSlice";
 
 const SvgWrapper: FunctionComponent = ( { children } ) => {
 
-    const dimensions = useSelector( selectClientDimensions );
-    const offset = useSelector( selectOffset );
+    const dimensions = useSelector( selectClientDimensions ) || 0;
+    const offset = useSelector( selectOffset ) || 0;
 
     return (
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           className={ styles.svgWrapper }
-          width={ dimensions?.width || 0 }
-          height={ dimensions?.height || 0 }
-          viewBox={ `${ -offset?.x || 0 } ${ -offset?.y || 0 } ${ dimensions?.width || 0 } ${ dimensions?.height || 0 }` }
+          width={ dimensions.width }
+          height={ dimensions.height }
+          viewBox={ `${ -offset.x } ${ -offset.y } ${ dimensions.width } ${ dimensions.height }` }
       >
           { children }
       </svg>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from "../../hooks";
-import { unapplyScaleAndOffset } from "../../redux/artboardSlice";
+import { unapplyScale } from "../../redux/artboardSlice";
 import { selectDragDistance } from "../../redux/clientSlice";
 import { selectAppMode } from "../../redux/modeSlice";
 import { activateShape, deactivateShapes, selectActiveShape } from "../../redux/penSlice";
@@ -24,13 +24,13 @@ const Shape = ( { shape }: ShapeProps ): JSX.Element => {
 
     const appMode = useSelector( selectAppMode );
 
-    const unscaleAndUnoffset = useSelector( unapplyScaleAndOffset );
+    const unscale = useSelector( unapplyScale );
 
     const isActive = shape.id === activeShape?.id;
 
     const [ hovering, setHovering ] = useState( false );
 
-    const unscaledShapePoints = shape.points.map( unscaleAndUnoffset );
+    const unscaledShapePoints = shape.points.map( unscale );
 
     return (
         <g>

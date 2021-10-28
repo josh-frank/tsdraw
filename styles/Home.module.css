@@ -38,7 +38,7 @@
 .artboardOptions {
   position: absolute;
   right: 1vw;
-  width: 40vw;
+  width: 50vw;
   background-color: #eee;
   display: flex;
   flex-direction: column;

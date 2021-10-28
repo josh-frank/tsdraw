@@ -7,3 +7,5 @@ export const toPath = ( points: Coordinates[], closePath: boolean = false ): str
 export const vectorAddition = ( theseCoordinates: Coordinates, thoseCoordinates: Coordinates ): Coordinates => ( { x: theseCoordinates.x + thoseCoordinates.x, y: theseCoordinates.y + thoseCoordinates.y } );
 
 export const vectorEquality = ( theseCoordinates: Coordinates, thoseCoordinates: Coordinates ): boolean => theseCoordinates.x === thoseCoordinates.x && theseCoordinates.y === thoseCoordinates.y;
+
+export const vectorMidpoint = ( theseCoordinates: Coordinates, thoseCoordinates: Coordinates ): Coordinates => ( { x: ( theseCoordinates.x + thoseCoordinates.x ) / 2, y: ( theseCoordinates.y + thoseCoordinates.y ) / 2 } );

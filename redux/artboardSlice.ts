@@ -64,7 +64,8 @@ export const selectSnapToGrid = ( state: RootState ) => state.artboard.snapToGri
 export const selectGridInterval = ( state: RootState ) => state.artboard.gridInterval;
 export const selectDarkMode = ( state: RootState ) => state.artboard.darkMode;
 
-export const applyScale = createSelector( selectZoom, ( zoom ) => ( coordinates: Coordinates ): Coordinates => ( { x: coordinates.x / zoom * 100, y: coordinates.y / zoom * 100 } ) );
+export const unapplyScale = createSelector( selectZoom, ( zoom ) => ( coordinates: Coordinates ): Coordinates => ( { x: coordinates.x * zoom / 100, y: coordinates.y * zoom / 100 } ) );
+export const unapplyOffset = createSelector( selectOffset, ( offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: coordinates.x - offset.x, y: coordinates.y - offset.y } ) );
 export const applyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: ( coordinates.x - offset.x ) / zoom * 100, y: ( coordinates.y - offset.y ) / zoom * 100 } ) );
 export const unapplyScaleAndOffset = createSelector( selectZoom, selectOffset, ( zoom, offset ) => ( coordinates: Coordinates ): Coordinates => ( { x: offset.x + coordinates.x * zoom / 100, y: offset.y + coordinates.y * zoom / 100 } ) );
 export const snapCoordinatesToGrid = createSelector( selectZoom, selectOffset, selectGridInterval, ( zoom, offset, gridInterval ) => ( coordinates: Coordinates ): Coordinates => ( {
